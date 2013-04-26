@@ -1,6 +1,10 @@
 <?php
 namespace Mopa\BootstrapBundle\Form\Extension;
 
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
+use Symfony\Component\Form\FormBuilderInterface;
+
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -14,20 +18,20 @@ class ErrorTypeFormTypeExtension extends AbstractTypeExtension
     public function __construct(array $options){
         $this->error_type = $options['error_type'];
     }
-	public function buildForm(FormBuilder $builder, array $options)
+	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
         $builder->setAttribute('error_type', $options['error_type']);
 	}
 	
-	public function buildView(FormView $view, FormInterface $form)
+	public function buildView(FormView $view, FormInterface $form, array $options)
 	{
-	    $view->set('error_type', $form->getAttribute('error_type'));
+	    $view->vars['error_type'] = $form->getAttribute('error_type');
 	}
-    public function getDefaultOptions(array $options)
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        return array(
+        $resolver->setDefaults(array(
             'error_type' => $this->error_type,
-        );
+        ));
     }
 	public function getExtendedType()
 	{
